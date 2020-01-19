@@ -1,31 +1,8 @@
 (function(self) {
-	async function fetchJSONFile(path) {
-		return await new Promise(resolve => {
-			let httpRequest = new XMLHttpRequest();
-			httpRequest.onreadystatechange = function() {
-				if (httpRequest.readyState === 4) {
-					if (httpRequest.status === 200) {
-						launchWorker =
-							"data:text/javascript;charset=US-ASCII," +
-							httpRequest.responseText;
-						resolve(launchWorker);
-					}
-				}
-			};
-			httpRequest.open("GET", path);
-			httpRequest.send();
-		});
-	}
-
-	let launchWorker;
-
 	self.onmessage = async ({
 		data: { length, formValues, iterationValues }
 	}) => {
 		let result;
-		await fetchJSONFile(
-			"https://raw.githubusercontent.com/jlgarciam/simulated-annealing/master/launch_worker.js"
-		);
 		if (iterationValues) {
 			searchLocalMinimum({
 				length,
@@ -98,7 +75,7 @@
 			await Promise.all(
 				Array.from({ length }).map(_ => {
 					return new Promise(resolve => {
-						const worker = new Worker(launchWorker);
+						const worker = new Worker("/launch_worker.js");
 						worker.postMessage(formValues);
 						worker.onmessage = ({ data: result }) => {
 							resolve(result);

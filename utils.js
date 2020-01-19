@@ -1,22 +1,3 @@
-function fetchJSONFile(path) {
-	let httpRequest = new XMLHttpRequest();
-	httpRequest.onreadystatechange = function() {
-		if (httpRequest.readyState === 4) {
-			if (httpRequest.status === 200) {
-				workerIter =
-					"data:text/javascript;charset=US-ASCII," + httpRequest.responseText;
-			}
-		}
-	};
-	httpRequest.open("GET", path);
-	httpRequest.send();
-}
-
-let workerIter;
-fetchJSONFile(
-	"https://raw.githubusercontent.com/jlgarciam/simulated-annealing/master/iteration_worker.js"
-);
-
 //  -----------------------FORMS-----------------------
 function validateInputs() {
 	const form = document.getElementById("form");
@@ -80,7 +61,7 @@ function getFormArrayValues() {
 function simpleSearch() {
 	changeButtonsState(true);
 	const { length, ...formValues } = getFormValues();
-	const worker = new Worker(iterration_path);
+	const worker = new Worker("iteration_worker.js");
 	worker.postMessage({ formValues, length });
 	worker.onmessage = ({ data: { finish, result } }) => {
 		if (!finish) {
@@ -95,7 +76,7 @@ function searchForLocalMinimum() {
 	changeButtonsState(true);
 	const { length, ...formValues } = getFormValues();
 	const iterationValues = getFormArrayValues();
-	const worker = new Worker(workerIter);
+	const worker = new Worker("iteration_worker.js");
 	worker.postMessage({ formValues, length, iterationValues });
 	worker.onmessage = ({ data: { finish, result } }) => {
 		if (!finish) {

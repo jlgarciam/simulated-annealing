@@ -1,5 +1,3 @@
-// console.log(simulatedAnnealing(75, 2, 0.95, 1, 1));
-
 /**
  *  Ejecuta el alogritmo de enfriamiento simulado
  * @param {number} nc Numero de apuestas

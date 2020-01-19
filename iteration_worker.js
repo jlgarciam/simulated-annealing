@@ -1,4 +1,23 @@
 (function(self) {
+	function fetchJSONFile(path) {
+		let httpRequest = new XMLHttpRequest();
+		httpRequest.onreadystatechange = function() {
+			if (httpRequest.readyState === 4) {
+				if (httpRequest.status === 200) {
+					launchWorker =
+						"data:text/javascript;charset=US-ASCII," + httpRequest.responseText;
+				}
+			}
+		};
+		httpRequest.open("GET", path);
+		httpRequest.send();
+	}
+
+	let launchWorker;
+	fetchJSONFile(
+		"https://raw.githubusercontent.com/jlgarciam/simulated-annealing/master/launch_worker.js"
+	);
+
 	self.onmessage = async ({
 		data: { length, formValues, iterationValues }
 	}) => {
@@ -75,7 +94,7 @@
 			await Promise.all(
 				Array.from({ length }).map(_ => {
 					return new Promise(resolve => {
-						const worker = new Worker("/launch_worker.js");
+						const worker = new Worker(launchWorker);
 						worker.postMessage(formValues);
 						worker.onmessage = ({ data: result }) => {
 							resolve(result);

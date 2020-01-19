@@ -1,7 +1,7 @@
 (function(self) {
 	async function fetchJSONFile(path) {
 		return await new Promise(resolve => {
-			let httpRequest = XMLHttpRequest();
+			let httpRequest = new XMLHttpRequest();
 			httpRequest.onreadystatechange = function() {
 				if (httpRequest.readyState === 4) {
 					if (httpRequest.status === 200) {
@@ -23,7 +23,7 @@
 		data: { length, formValues, iterationValues }
 	}) => {
 		let result;
-		fetchJSONFile(
+		await fetchJSONFile(
 			"https://raw.githubusercontent.com/jlgarciam/simulated-annealing/master/launch_worker.js"
 		);
 		if (iterationValues) {

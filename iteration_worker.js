@@ -1,5 +1,5 @@
 (function(self) {
-	function fetchJSONFile(path) {
+	async function fetchJSONFile(path) {
 		return await new Promise(resolve => {
 			let httpRequest = XMLHttpRequest();
 			httpRequest.onreadystatechange = function() {
@@ -8,7 +8,7 @@
 						launchWorker =
 							"data:text/javascript;charset=US-ASCII," +
 							httpRequest.responseText;
-							resolve(launchWorker); 
+						resolve(launchWorker);
 					}
 				}
 			};

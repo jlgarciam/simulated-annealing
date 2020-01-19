@@ -1,7 +1,7 @@
 {
-	"root": "/",
+	"root": ".",
 	"clean_urls": false,
 	"routes": {
-		"/**": "/quiniela.html"
+		"/**": "quiniela.html"
 	}
 }

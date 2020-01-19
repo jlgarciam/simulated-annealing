@@ -1,27 +1,31 @@
 (function(self) {
 	function fetchJSONFile(path) {
-		let httpRequest = new XMLHttpRequest();
-		httpRequest.onreadystatechange = function() {
-			if (httpRequest.readyState === 4) {
-				if (httpRequest.status === 200) {
-					launchWorker =
-						"data:text/javascript;charset=US-ASCII," + httpRequest.responseText;
+		return await new Promise(resolve => {
+			let httpRequest = XMLHttpRequest();
+			httpRequest.onreadystatechange = function() {
+				if (httpRequest.readyState === 4) {
+					if (httpRequest.status === 200) {
+						launchWorker =
+							"data:text/javascript;charset=US-ASCII," +
+							httpRequest.responseText;
+							resolve(launchWorker); 
+					}
 				}
-			}
-		};
-		httpRequest.open("GET", path);
-		httpRequest.send();
+			};
+			httpRequest.open("GET", path);
+			httpRequest.send();
+		});
 	}
 
 	let launchWorker;
-	fetchJSONFile(
-		"https://raw.githubusercontent.com/jlgarciam/simulated-annealing/master/launch_worker.js"
-	);
 
 	self.onmessage = async ({
 		data: { length, formValues, iterationValues }
 	}) => {
 		let result;
+		fetchJSONFile(
+			"https://raw.githubusercontent.com/jlgarciam/simulated-annealing/master/launch_worker.js"
+		);
 		if (iterationValues) {
 			searchLocalMinimum({
 				length,
